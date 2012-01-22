@@ -71,6 +71,9 @@ $( document ).delegate("#navig", "pagecreate", function() {
 	});
 });
 function LoadSettings() {
+	alert('loading');
+	var test = localStorage.getItem("user");
+	alert(test);
 	if (localStorage.getItem("user")) {
 		$('#user').val(localStorage.getItem("user"));
 	}
