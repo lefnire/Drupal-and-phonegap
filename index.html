@@ -67,13 +67,9 @@ $( document ).delegate("#navig", "pagecreate", function() {
 		localStorage.setItem("user", $('#user').val());
 		localStorage.setItem("end", $('#endpoint').val());
 		localStorage.setItem("pass", $('#password').val());
-		alert(localStorage.getItem("user"));
 	});
 });
 function LoadSettings() {
-	alert('loading');
-	var test = localStorage.getItem("user");
-	alert(test);
 	if (localStorage.getItem("user")) {
 		$('#user').val(localStorage.getItem("user"));
 	}

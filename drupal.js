@@ -29,7 +29,12 @@ function drupalServicesLogin(data, successFunction, errorFunction) {
 			successFunction(data);
 		},
 		error: function(data) {
-			errorFunction(data);
+			if (data.statusText.indexOf('Already logged in')>1) {
+				alert('You are already logged in!');
+			}
+			else {
+				errorFunction(data);
+			}
 		}
 	});
 }
