@@ -48,9 +48,9 @@ document.addEventListener("deviceready", onDeviceReady, false);
 // PhoneGap is ready
 //
 function onDeviceReady() {
-	LoadSettings();
+	
 }
-$( document ).delegate("#navig", "pagecreate", function() {
+$( document ).delegate("#home", "pagecreate", function() {
 	$('#login').click(function() {
 		var data = {
 			'pass': $('#password').val(),
@@ -76,6 +76,9 @@ $( document ).delegate("#navig", "pagecreate", function() {
 		url = $('#endpoint').val();
 		drupalServicesPostNode(node_object, url, gotopage);
 	});
+});
+$( document ).delegate("#settings", "pagecreate", function() { 
+	LoadSettings();
 	$('input').change(function() {
 		localStorage.setItem("user", $('#user').val());
 		localStorage.setItem("end", $('#endpoint').val());
