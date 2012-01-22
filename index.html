@@ -23,174 +23,49 @@
 	Password:<input type="password" id="password" />
 	<button id="login">Login</button>
 	<button id="logout">Log out</button>
+	<button id="postnode">Post node</button>
 </div>
 
 
 <script>
 $( document ).delegate("#navig", "pagecreate", function() {
 	$('#login').click(function() {
-		var pass = $('#password').val();
-		var user = $('#user').val();
-		url = $('#enpoint').val();
-		login(url, user, pass);
+		var data = {
+			'pass': $('#password').val(),
+			'user': $('#user').val(),
+			'url': $('#enpoint').val()
+		};
+		drupalServicesLogin(data);
 	});
 	$('#logout').click(function() {
 		url = $('#enpoint').val();
-		logout(url);
+		drupalServicesLogout(url);
+	});
+	$('#postnode').click(function() {
+		var date = new Date();
+		var timestamp = Math.round(date.getTime() / 1000);
+		var node_object = {
+			"type": prompt("Enter content type"),
+			"title": prompt("Enter node title"),
+			"body": { "und": { 0 : { "value": prompt("Enter body text") } } },
+			"created": timestamp, // Set key to 'created' for node.save. Use 'changed' for node.update 
+			"status": 1 // Set to 1 for Published. O for unpublished.
+		};
+		url = $('#enpoint').val();
+		drupalServicesPostNode(node_object, url, gotopage);
 	});
 });
-function onSuccess(imageData) {
-    var data = {
-		"file": imageData,
-		"filename": 'kameraskit.jpg'
+function gotopage(data) {
+	var a = confirm("Node posted sucessfully. Do you want to navigate to it?");
+	
+	if (a == true) {
+	  url = prompt("Enter base path (no trailing slash)");
+	  window.parent.location = url + '/node/' + data.nid;
 	}
-	window.stiligdata = data;
-	navigator.geolocation.getCurrentPosition(onGeoSuccess, onGeoError);
-}
-function onGeoSuccess(position) {
-	var geo = {
-		"lat": position.coords.latitude,
-        "lon": position.coords.longitude
+	else {
+	  //
 	}
-	window.geoz = geo;
-	url = 'http://orkjern.com/kamera/test/file.json'
-	$.ajax({
-        url: url,
-        type: "POST",
-		data: window.stiligdata,
-        success: function(dataz) {
-			postnode(dataz['fid']);
-		}
-     }
-  )
 }
-function onGeoError(error) {
-    alert('code: '    + error.code    + '\n' +
-          'message: ' + error.message + '\n');
-}
-	
-
-function onFail(message) {
-    alert('Failed because: ' + message);
-}
-
-function biletpost() {
-	navigator.camera.getPicture(onSuccess, onFail, { quality: 50 }); 	
-}
-	
-function xmltest() {
-	url = 'http://norvegiana2.delving.org/services/api/search?query=*:*&qf=HASDIGITALOBJECT:true&qf=COUNTY:Oppland&start=0&rows=10&start=1'
-	$.ajax({
-        url: url,
-        type: "GET",
-        success: function(data){
-           $("items",data).each(function(i) {
-				$("item",this).each(function(i) {
-					$("*",this).each(function(i) {
-						console.log(this);
-						denne = this.nodeName;
-						if (denne == 'dc:title') {
-							alert('kul tittel:' + $(this).text())
-						}
-						$('#xml1').append('<span>' + denne + '</span>');
-					})
-				})
-			})
-        }
-     }
-  )
-}
-function posttilorkj() {
-	loc = $('#loc').html();
-	console.log(loc);
-	locArray = loc.split(',');
-	lat = locArray[0];
-	lon = locArray[1];
-	var date = new Date();
-	var timestamp = Math.round(date.getTime() / 1000);
-	lat = "63.947025"
-	lon = "11.821289"
-	var node_object = {
-		"type": "stat",
-		"field_geo": { "und": { 0 : { 
-			"wkt": "POINT (" + lon + " " + lat + ")",
-			"geo_type": "point",
-			"lat": lon,
-			"lon": lat,
-			"top": lon,
-			"bottom": lon,
-			"left": lat,
-			"right": lat } } }, 
-		"title": "My First Node",
-		"body": { "und": { 0 : { "value": "Her kan jeg kanskje putte inn device data" } } },
-		"created": timestamp, // Set key to 'created' for node.save. Use 'changed' for node.update 
-		"status": 1 // Set to 1 for Published. O for unpublished.
-	};
-	var pass = $('#passord').val();
-	$.post("http://orkjern.com/kamera/test/user/login.json", { "username":"eirikk","password":pass })
-	.error(function() { console.log('errror') })
-	.complete(function() { 
-		$.post("http://orkjern.com/kamera/test/node", node_object, function(data) {
-			console.log(data)
-		})
-	})
-	.success(function() {
-		$.post("http://orkjern.com/kamera/test/node", node_object, function(data) {
-			console.log(data)
-		});
-	});
-	
-}
-function postnode(fid) {
-	var date = new Date();
-	var timestamp = Math.round(date.getTime() / 1000);;
-	lat = window.geoz['lat'];
-	lon = window.geoz['lon'];
-	var node_object = {
-		"type": "stat",
-		"field_geo": { "und": { 0 : { 
-			"wkt": "POINT (" + lon + " " + lat + ")",
-			"geo_type": "point",
-			"lat": lon,
-			"lon": lat,
-			"top": lon,
-			"bottom": lon,
-			"left": lat,
-			"right": lat } } }, 
-		"title": "My First biletNode",
-		"field_image": { "und": { 0 : {
-			"fid": fid,
-			"alt": "jadda",
-			"title": "nisse" } } },
-		"body": { "und": { 0 : { "value": "Her kan jeg kanskje putte inn device data" } } },
-		"created": timestamp, // Set key to 'created' for node.save. Use 'changed' for node.update 
-		"status": 1 // Set to 1 for Published. O for unpublished.
-	};
-	
-	url = 'http://orkjern.com/kamera/test/node.json';
-	$.ajax({
-		url: url,
-		type: "POST",
-		data: node_object,
-		success: function(dataz) {
-			console.log(dataz);
-			alert('yes!');
-			loggut();
-		}
-	})
-}
-function loggut() {
-	$.ajax({
-        url: 'http://orkjern.com/kamera/test/user/logout.json',
-        type: "POST",
-        success: function(dataz) {
-			alert('logga ut')
-		}
-	})
-}
-
-
-
 </script> 
 </body>
 </html>
