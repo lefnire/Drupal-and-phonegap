@@ -15,16 +15,29 @@
 <script type="text/javascript" src="drupal.js"></script>
 </head>
 <body>
-	<div data-role="page" id="navig" class="navig" data-theme="b">
+	<div data-role="page" id="home" class="navig" data-theme="b">
 	<div data-role="header" id="title_bar" data-theme="a"><h1>Post to Drupal site starting kit</h1></div>
 
-	URL to services endpoint:<input type="text" id="endpoint" />
-	Username:<input type="text" id="user" />
-	Password:<input type="password" id="password" />
 	<button id="login">Login</button>
 	<button id="logout">Log out</button>
 	<button id="postnode">Post node</button>
-</div>
+	<div data-role="footer" data-position="fixed" class="foot" data-theme="a">
+		<a href="#settings" data-icon="gear" class="ui-btn-right">Settings</a>
+		<a href="#home" data-icon="home" class="ui-btn-right">Home</a>
+	</div>
+	</div>
+	<div data-role="page" id="settings" class="navig" data-theme="b">
+	<div data-role="header" id="title_bar" data-theme="a"><h1>Post to Drupal site starting kit</h1></div>
+	URL to services endpoint:<input type="text" id="endpoint" />
+	Base path to site (no trailing slash): <input type="text" id="base" />
+	Username:<input type="text" id="user" />
+	Password:<input type="password" id="password" />
+	<div data-role="footer" data-position="fixed" class="foot" data-theme="a">
+		<a href="#settings" data-icon="gear" class="ui-btn-right">Settings</a>
+		<a href="#home" data-icon="home" class="ui-btn-right">Home</a>
+	</div>
+	</div>
+	
 
 
 <script>
@@ -67,6 +80,7 @@ $( document ).delegate("#navig", "pagecreate", function() {
 		localStorage.setItem("user", $('#user').val());
 		localStorage.setItem("end", $('#endpoint').val());
 		localStorage.setItem("pass", $('#password').val());
+		localStorage.setItem("base", $('#base').val());
 	});
 });
 function LoadSettings() {
@@ -79,12 +93,15 @@ function LoadSettings() {
 	if (localStorage.getItem("pass")) {
 		$('#password').val(localStorage.getItem("pass"));
 	}
+	if (localStorage.getItem("base")) {
+		$('#base').val(localStorage.getItem("base"));
+	}
 }
 function gotopage(data) {
 	var a = confirm("Node posted sucessfully. Do you want to navigate to it?");
 	
 	if (a == true) {
-	  url = prompt("Enter base path (no trailing slash)");
+	  url = $('#base').val();
 	  window.parent.location = url + '/node/' + data.nid;
 	}
 	else {
