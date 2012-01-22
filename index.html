@@ -18,7 +18,7 @@
 	<div data-role="page" id="navig" class="navig" data-theme="b">
 	<div data-role="header" id="title_bar" data-theme="a"><h1>Post to Drupal site starting kit</h1></div>
 
-	URL to services endpoint:<input type="text" id="enpoint" />
+	URL to services endpoint:<input type="text" id="endpoint" />
 	Username:<input type="text" id="user" />
 	Password:<input type="password" id="password" />
 	<button id="login">Login</button>
@@ -28,17 +28,26 @@
 
 
 <script>
+// Wait for PhoneGap to load
+//
+document.addEventListener("deviceready", onDeviceReady, false);
+
+// PhoneGap is ready
+//
+function onDeviceReady() {
+	LoadSettings();
+}
 $( document ).delegate("#navig", "pagecreate", function() {
 	$('#login').click(function() {
 		var data = {
 			'pass': $('#password').val(),
 			'user': $('#user').val(),
-			'url': $('#enpoint').val()
+			'url': $('#endpoint').val()
 		};
 		drupalServicesLogin(data);
 	});
 	$('#logout').click(function() {
-		url = $('#enpoint').val();
+		url = $('#endpoint').val();
 		drupalServicesLogout(url);
 	});
 	$('#postnode').click(function() {
@@ -51,10 +60,27 @@ $( document ).delegate("#navig", "pagecreate", function() {
 			"created": timestamp, // Set key to 'created' for node.save. Use 'changed' for node.update 
 			"status": 1 // Set to 1 for Published. O for unpublished.
 		};
-		url = $('#enpoint').val();
+		url = $('#endpoint').val();
 		drupalServicesPostNode(node_object, url, gotopage);
 	});
+	$('input').change(function() {
+		localStorage.setItem("user", $('#user').val());
+		localStorage.setItem("end", $('#endpoint').val());
+		localStorage.setItem("pass", $('#password').val());
+		alert(localStorage.getItem("user"));
+	});
 });
+function LoadSettings() {
+	if (localStorage.getItem("user")) {
+		$('#user').val(localStorage.getItem("user"));
+	}
+	if (localStorage.getItem("end")) {
+		$('#endpoint').val(localStorage.getItem("end"));
+	}
+	if (localStorage.getItem("pass")) {
+		$('#password').val(localStorage.getItem("pass"));
+	}
+}
 function gotopage(data) {
 	var a = confirm("Node posted sucessfully. Do you want to navigate to it?");
 	

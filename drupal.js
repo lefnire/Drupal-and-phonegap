@@ -72,9 +72,9 @@ function drupalServicesLogout(url, successFunction, errorFunction) {
  * @param url
  *   URL to services endpoint at Drupal instance.
  * @param successFunction
- *   A callback function invoked when the login was successful.
+ *   A callback function invoked when the node was posted successfully.
  * @param errorFunction
- *   A callback function invoked when the login was unsuccessful.
+ *   A callback function invoked when the node did not get posted.
  */
 function drupalServicesPostNode(node, url, successFunction, errorFunction) {
 	if (typeof successFunction == 'undefined') {
@@ -97,6 +97,10 @@ function drupalServicesPostNode(node, url, successFunction, errorFunction) {
 	});
 }
 
+/**
+ * Standard success and error functions. Not much fun here.
+ *
+ */
 function drupalServicesAwesome(data) {
 	console.log(data);
 	alert('Success!');
