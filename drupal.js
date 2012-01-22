@@ -99,7 +99,9 @@ function drupalServicesPostNode(node, url, successFunction, errorFunction) {
 
 function drupalServicesAwesome(data) {
 	console.log(data);
+	alert('Success!');
 }
 function drupalServicesDarned(data) {
 	console.log(data);
+	alert('Something went wrong!');
 }
