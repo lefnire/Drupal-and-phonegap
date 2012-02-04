@@ -79,19 +79,21 @@ $( document ).delegate("#home", "pagecreate", function() {
 		drupalServicesPostNode(node_object, url, gotopage);
 	});
 	$('#postpic').click(function() {
-		navigator.camera.getPicture( function(data) {
-			url = $('#endpoint').val();
-			var data = {
-				"file": data,
-				"filename": "niuten.jpg"
-			};
-		drupalServicesPostFile(data, url, postwith);
-		});
-		
-		
+		navigator.camera.getPicture(picsuccess, onfail,  { quality: 50 }); 
 	});
 	
 });
+function onfail(message) {
+	alert(message);
+}
+function picsuccess (data) {
+	url = $('#endpoint').val();
+	var data = {
+		"file": data,
+		"filename": "niuten.jpg"
+	};
+	drupalServicesPostFile(data, url, postwith);
+}
 function postwith(data) {
 	var date = new Date();
 	var timestamp = Math.round(date.getTime() / 1000);
