@@ -52,6 +52,7 @@ function onDeviceReady() {
 	
 }
 $( document ).delegate("#home", "pagecreate", function() {
+	LoadSettings();
 	$('#login').click(function() {
 		var data = {
 			'pass': $('#password').val(),
