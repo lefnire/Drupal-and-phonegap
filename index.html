@@ -101,11 +101,11 @@ function postwith(data) {
 		"type": prompt("Enter content type"),
 		"title": prompt("Enter node title"),
 		"body": { "und": { 0 : { "value": prompt("Enter body text") } } },
-		imgfield: 
 		"created": timestamp, // Set key to 'created' for node.save. Use 'changed' for node.update 
+		"language": "und",
 		"status": 1 // Set to 1 for Published. O for unpublished.
 	};
-	var node_object[imgfield] = {
+	node_object[imgfield] = {
 		"und": { 0 : {
 			"fid": data.fid,
 			"alt": "Some alt text",
