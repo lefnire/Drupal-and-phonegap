@@ -30,12 +30,10 @@
 	<div data-role="page" id="settings" class="navig" data-theme="b">
 	<div data-role="header" id="title_bar" data-theme="a"><h1>Post to Drupal site starting kit</h1></div>
 	URL to services endpoint:<input type="text" id="endpoint" />
-	Base path to site (no trailing slash): <input type="text" id="base" />
 	Username:<input type="text" id="user" />
 	Password:<input type="password" id="password" />
 	<div data-role="footer" data-position="fixed" class="foot" data-theme="a">
-		<a href="#settings" data-icon="gear" class="ui-btn-right">Settings</a>
-		<a href="#home" data-icon="home" class="ui-btn-right">Home</a>
+		<a href="#home" data-icon="home" class="ui-btn-right">OK</a>
 	</div>
 	</div>
 	
@@ -103,14 +101,16 @@ function postwith(data) {
 		"type": prompt("Enter content type"),
 		"title": prompt("Enter node title"),
 		"body": { "und": { 0 : { "value": prompt("Enter body text") } } },
-		imgfield: { "und": { 0 : {
-			"fid": data.fid,
-			"alt": "Some alt text",
-			"title": "Some title text"
-			} } },
+		imgfield: 
 		"created": timestamp, // Set key to 'created' for node.save. Use 'changed' for node.update 
 		"status": 1 // Set to 1 for Published. O for unpublished.
 	};
+	var node_object[imgfield] = {
+		"und": { 0 : {
+			"fid": data.fid,
+			"alt": "Some alt text",
+			"title": "Some title text"
+		} } };
 	url = $('#endpoint').val();
 	drupalServicesPostNode(node_object, url, gotopagewith);
 }
