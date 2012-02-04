@@ -21,6 +21,7 @@
 	<button id="login">Login</button>
 	<button id="logout">Log out</button>
 	<button id="postnode">Post node</button>
+	<button id="postpic">Post node with picture</button>
 	<div data-role="footer" data-position="fixed" class="foot" data-theme="a">
 		<a href="#settings" data-icon="gear" class="ui-btn-right">Settings</a>
 		<a href="#home" data-icon="home" class="ui-btn-right">Home</a>
@@ -76,7 +77,37 @@ $( document ).delegate("#home", "pagecreate", function() {
 		url = $('#endpoint').val();
 		drupalServicesPostNode(node_object, url, gotopage);
 	});
+	$('#postpic').click(function() {
+		navigator.camera.getPicture( function(data) {
+			url = $('#endpoint').val();
+			var data = {
+				"file": data,
+				"filename": "niuten.jpg"
+			};
+		drupalServicesPostFile(data, url, postwith);
+		});
+		
+		
+	});
+	
 });
+function postwith(data) {
+	var date = new Date();
+	var timestamp = Math.round(date.getTime() / 1000);
+	var node_object = {
+		"type": prompt("Enter content type"),
+		"title": prompt("Enter node title"),
+		"body": { "und": { 0 : { "value": prompt("Enter body text") } } },
+		"field_image": { "und": { 0 : {
+			"fid": data.fid,
+			"alt": "jadda",
+			"title": "nisse" } } },
+		"created": timestamp, // Set key to 'created' for node.save. Use 'changed' for node.update 
+		"status": 1 // Set to 1 for Published. O for unpublished.
+	};
+	url = $('#endpoint').val();
+	drupalServicesPostNode(node_object, url, gotopage);
+}
 $( document ).delegate("#settings", "pagecreate", function() { 
 	LoadSettings();
 	$('input').change(function() {

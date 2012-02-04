@@ -103,6 +103,39 @@ function drupalServicesPostNode(node, url, successFunction, errorFunction) {
 }
 
 /**
+ * Post a file to a Drupal site.
+ *
+ * @param file
+ *   An associative array consisting of a filename ("filename") and a base64 encoded file ("file").
+ * @param url
+ *   URL to services endpoint at Drupal instance.
+ * @param successFunction
+ *   A callback function invoked when the node was posted successfully.
+ * @param errorFunction
+ *   A callback function invoked when the node did not get posted.
+ */
+function drupalServicesPostFile(file, url, successFunction, errorFunction) {
+	if (typeof successFunction == 'undefined') {
+		var successFunction = drupalServicesAwesome;
+	};
+	if (typeof errorFunction == 'undefined') {
+		var errorFunction = drupalServicesDarned;
+	};
+	var url = url + '/file.json';
+	$.ajax({
+        url: url,
+        type: "POST",
+		data: file,
+		success: function(data) {
+			successFunction(data);
+		},
+		error: function(data) {
+			errorFunction(data);
+		}
+	});
+}
+
+/**
  * Standard success and error functions. Not much fun here.
  *
  */
